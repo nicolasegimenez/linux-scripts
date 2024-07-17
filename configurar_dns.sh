@@ -1,10 +1,11 @@
-sudo service connman stop
+lspci | grep -i network
+lsmod | grep ath9k
+modprobe ath9k
+ip link set wlan0 up
+wpa_supplicant -B -i wlan0 -c ./wpa_supplicant.conf
+dhclient wlan0 -v
+sudo service pihole-FTL start
+service lighttpd restart
+ping -c 2 8.8.8.8
+ping -c 2 google.com
 
-if [ -L /etc/resolv.conf]; then
-	sudo rm /etc/resolv.conf
-fi
-echo "nameserver 8.8.8.8" | sudo tee /run/connman/resolv.conf > dev/null
-echo "nameserver 8.8.4.4" | sudo tee -a /run/conmman/resolv.conf > /dev/null
-sudo ln -s /run/connman/resolv.conf /etc/resolv.conf
-sudo service connman start
-echo "configuracion de dns completada"
